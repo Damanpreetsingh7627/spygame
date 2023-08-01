@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game2 {
+    public static void main(String[] args) {
+        int[][] hallway = {
+                {0, 0, 1, 0},
+                {1, 0, 1, 1},
+                {0, 0, 0, 0},
+                {1, 1, 1, 0}
+        };
+        navigateHallway(hallway);
+    }
+
+    public static void navigateHallway(int[][] hallway) {
+        List<List<Integer>> path = new ArrayList<>();
+        List<Integer> currentPath = new ArrayList<>();
+        explorePath(hallway, 0, 0, path, currentPath);
+
+        if (path.isEmpty()) {
+            System.out.println("No path found.");
+        } else {
+            System.out.println("Path found:");
+            for (List<Integer> cell : path) {
+                System.out.println("(" + cell.get(0) + ", " + cell.get(1) + ")");
+            }
+        }
+    }
+
+    private static void explorePath(int[][] hallway, int row, int col, List<List<Integer>> path, List<Integer> currentPath) {
+        int rows = hallway.length;
+        int cols = hallway[0].length;
+
+        if (row >= rows || col >= cols || hallway[row][col] == 1) {
+            return; // Out of bounds or laser cell, backtrack
+        }
+
+        // Mark current cell as visited
+        currentPath.add(row);
+        currentPath.add(col);
+
+        // If we reached the bottom-right cell, add the current path to the list of valid paths
+        if (row == rows - 1 && col == cols - 1) {
+            path.add(new ArrayList<>(currentPath));
+        }
+
+        // Explore right and down
+        explorePath(hallway, row, col + 1, path, currentPath); // Move right
+        explorePath(hallway, row + 1, col, path, currentPath); // Move down
+
+        // Backtrack: remove current cell from the currentPath before returning to the previous cell
+        currentPath.remove(currentPath.size() - 1);
+        currentPath.remove(currentPath.size() - 1);
+    }
+}
