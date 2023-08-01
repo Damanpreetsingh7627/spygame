@@ -1,0 +1,48 @@
+public class Game3 {
+    public static void main(String[] args) {
+        crackSafe();
+    }
+
+    public static void crackSafe() {
+        for (int first = 0; first < 100; first++) {
+            for (int second = 0; second < 100; second++) {
+                for (int third = 0; third < 100; third++) {
+                    if (second + third == first) {
+                        int dialPosition = 0;
+                        int currentNumber = 0;
+
+                        // Turn the dial three times right
+                        for (int i = 0; i < 3; i++) {
+                            currentNumber = (currentNumber + 1) % 100;
+                            dialPosition++;
+                            if (currentNumber == first) {
+                                break;
+                            }
+                        }
+
+                        // Turn the dial two times left
+                        for (int i = 0; i < 2; i++) {
+                            currentNumber = (currentNumber + 99) % 100;
+                            dialPosition--;
+                            if (currentNumber == second) {
+                                break;
+                            }
+                        }
+
+                        // Turn the dial one time right
+                        currentNumber = (currentNumber + 1) % 100;
+                        dialPosition++;
+
+                        // Check if the third number matches the current dial position
+                        if (currentNumber == third && dialPosition == 1) {
+                            System.out.println("Safe cracked! The combination is: " + first + ", " + second + ", " + third);
+                            return; // Found the correct combination, terminate the method
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println("Safe cannot be cracked with the given conditions.");
+    }
+}
